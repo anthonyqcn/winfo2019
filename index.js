@@ -1,5 +1,4 @@
-let glob_email = "";
-let glob_pwd = "";
+
 
 function signup() {
     let email = document.getElementById("email").value;
@@ -36,13 +35,13 @@ function signin() {
     let email = document.getElementById("emailSignIn").value;
     let password = document.getElementById("passwordSignIn").value;
 
-    firebase.auth().signInWithEmailAndPassword(email, password).then(() =>{
+    firebase.auth().signInWithEmailAndPassword(email, password).then(() => {
         console.log("signed in");
     }).catch(function (error) {
         // Handle Errors here.
         var errorCode = error.code;
         var errorMessage = error.message;
-        
+
         if (errorCode == 'auth/user-not-found' || errorCode == 'auth/wrong-password') {
             alert('Incorrect email or password. Please try again.');
         } else {
@@ -54,12 +53,12 @@ function signin() {
 }
 
 function signout() {
-    firebase.auth().signOut().then(function() {
+    firebase.auth().signOut().then(function () {
         // Sign-out successful.
         console.log("signed out");
-      }).catch(function(error) {
+    }).catch(function (error) {
         // An error happened.
-      });
+    });
 }
 
 function createProfile() {
@@ -76,8 +75,9 @@ function createProfile() {
             first_name: first,
             last_name: last,
             birthday: birthday,
-            bio: bio
-        }).then(() =>{
+            bio: bio,
+            in_session: true
+        }).then(() => {
             document.getElementById("createProfile").style.display = "none";
         });
     } else {
@@ -92,7 +92,7 @@ function updateTextInput(val) {
 function getNeedsInfo() {
     let user = firebase.auth().currentUser;
     var name = "";
-    firebase.database().ref("users/" + user.uid).on('value', function(snapshot) {
+    firebase.database().ref("users/" + user.uid).on('value', function (snapshot) {
         name = (snapshot.val() && (snapshot.val().first_name + " " + snapshot.val().last_name)) || 'Anonymous';
     });
     let address = document.getElementById("address");
@@ -100,13 +100,47 @@ function getNeedsInfo() {
 
     let jobList = [];
 
-    for(var i = 0; i < jobs.length; i++){
-        if (jobs[i].checked && jobs[i].name == "other"){
+    for (var i = 0; i < jobs.length; i++) {
+        if (jobs[i].checked && jobs[i].name == "other") {
             jobList.push(document.getElementById("other").value);
-        }else if(jobs[i].checked){
+        } else if (jobs[i].checked) {
             jobList.push(jobs[i].name);
         }
     }
-    console.log(jobList);
+
+    let duration = document.getElementById("textInput").value;
+
+    if (address != "" && jobList.length != 0 && duration != "") {
+        firebase.database().ref("/jobs/").push({
+            full_name: name,
+            jobs: jobList,
+            address: address,
+            duration: duration
+        });
+    } else {
+        alert("Please fill out all inputs.");
+    }
 }
+
+function showJob() {
+    //if (document.getElementById("createProfile").style.display = "none") {
+    document.getElementById("need").style.display = "none";
+    loadJobs();
+    //}
+}
+
+// Loads chat message history and listens for upcoming ones.
+function loadJobs() {
+    // Loads the last 12 messages and listens for new ones.
+    var callback = function (job) {
+        console.log(job.val())
+        // var data = snap.val();
+        // displayMessage(snap.key, data.name, data.text, data.profilePicUrl, data.imageUrl);
+    };
+
+    firebase.database().ref('/jobs/').on('child_added', callback);
+    firebase.database().ref('/jobs/').on('child_changed', callback);
+}
+
+
 

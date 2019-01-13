@@ -15,10 +15,14 @@
         };
         firebase.initializeApp(config);
     </script>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+        crossorigin="anonymous">
 </head>
 
 <body>
@@ -35,7 +39,7 @@
     <button type="submit" onclick="signin()">sign in</button>
 
     <br />
-  
+
     <!-- Sign out -->
     <button type="submit" onclick="signout()">sign out</button>
 
@@ -55,30 +59,32 @@
     <h5>Need help? Select "Need Assistance" to connect with a volunteer!</h5>
     <h5>Want to help? Select "Offer Assistance" to connect with a person in need of assistance!</h5>
     <button type="submit">Need Assistance</button>
-    <button type="submit">Offer Assistance</button>
+    <button type="submit" onclick = "showJob()">Offer Assistance</button>
 
     <!-- need assistance -->
-    <main>
-        <form>
-            Address: <input type="text" id="address">
-            <input type="checkbox" name="default" checked> Use Default
-        </form>
-        <form>
-            <h2>Tasks to Complete</h2>
-            <input class="job" type="checkbox" name="groceries"> Grocery Delivery </br>
-            <input class="job" type="checkbox" name="pet"> Walking pet(s) </br>
-            <input class="job" type="checkbox" name="lawn"> Lawn Mowing </br>
-            <input class="job" type="checkbox" name="clean"> House Cleaning </br>
-            <input class="job" type="checkbox" name="other"> Other: <input id = "other" type="text">
-        </form>
-        <div class="slidecontainer">
-            <h2>Estimated Time to Complete</h2>
-            <input type="range" name="rangeInput" min="0" max="100" value="1" class="slider" id="myRange" onchange="updateTextInput(this.value);">
-            <input type="text" id="textInput" value="">
-        </div>
-    </main>
+    <div id="need">
+        <main>
+            <form>
+                Address: <input type="text" id="address">
+                <input type="checkbox" name="default" checked> Use Default
+            </form>
+            <form>
+                <h2>Tasks to Complete</h2>
+                <input class="job" type="checkbox" name="groceries"> Grocery Delivery </br>
+                <input class="job" type="checkbox" name="pet"> Walking pet(s) </br>
+                <input class="job" type="checkbox" name="lawn"> Lawn Mowing </br>
+                <input class="job" type="checkbox" name="clean"> House Cleaning </br>
+                <input class="job" type="checkbox" name="other"> Other: <input id="other" type="text">
+            </form>
+            <div class="slidecontainer">
+                <h2>Estimated Time to Complete</h2>
+                <input type="range" name="rangeInput" min="0" max="100" value="1" class="slider" id="myRange" onchange="updateTextInput(this.value);">
+                <input type="text" id="textInput" value="">
+            </div>
+        </main>
 
-    <button type="submit" onclick="getNeedsInfo()">Done</button>
+        <button type="submit" onclick="getNeedsInfo()">Done</button>
+    </div>
 
     <!-- offer assistance -->
 
