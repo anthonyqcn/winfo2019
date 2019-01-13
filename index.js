@@ -6,9 +6,9 @@ function signup() {
 
     firebase.auth().createUserWithEmailAndPassword(email, password)
         .then(() => {
-            glob_email = email;
-            glob_pwd = password;
-            //window.location = "./createProfile.html";
+            
+            document.getElementById("createProfile").style.display = "block";
+            document.getElementById("signUp").style.display = "none";
 
         })
         .catch(function (error) {
@@ -37,6 +37,9 @@ function signin() {
 
     firebase.auth().signInWithEmailAndPassword(email, password).then(() => {
         console.log("signed in");
+        document.getElementById("signout").style.display = "block";
+        document.getElementById("landingPage").style.display = "block";
+        document.getElementById("signIn").style.display = "none";
     }).catch(function (error) {
         // Handle Errors here.
         var errorCode = error.code;
@@ -79,6 +82,7 @@ function createProfile() {
             in_session: true
         }).then(() => {
             document.getElementById("createProfile").style.display = "none";
+            document.getElementById("landingPage").style.display = "block";
         });
     } else {
         alert("Please fill out all inputs.");
@@ -90,41 +94,50 @@ function updateTextInput(val) {
 }
 
 function getNeedsInfo() {
+    
+    
+    
+    
     let user = firebase.auth().currentUser;
     var name = "";
     firebase.database().ref("users/" + user.uid).on('value', function (snapshot) {
         name = (snapshot.val() && (snapshot.val().first_name + " " + snapshot.val().last_name)) || 'Anonymous';
-    });
-    let address = document.getElementById("address");
-    let jobs = document.getElementsByClassName("job");
+    
+        let address = document.getElementById("address").value;
+        let jobs = document.getElementsByClassName("job");
 
-    let jobList = [];
+        let jobList = [];
 
-    for (var i = 0; i < jobs.length; i++) {
-        if (jobs[i].checked && jobs[i].name == "other") {
-            jobList.push(document.getElementById("other").value);
-        } else if (jobs[i].checked) {
-            jobList.push(jobs[i].name);
+        for (var i = 0; i < jobs.length; i++) {
+            if (jobs[i].checked && jobs[i].name == "other") {
+                jobList.push(document.getElementById("other").value);
+            } else if (jobs[i].checked) {
+                jobList.push(jobs[i].name);
+            }
         }
-    }
 
-    let duration = document.getElementById("textInput").value;
+        let duration = document.getElementById("textInput").value;
 
-    if (address != "" && jobList.length != 0 && duration != "") {
-        firebase.database().ref("/jobs/").push({
-            full_name: name,
-            jobs: jobList,
-            address: address,
-            duration: duration
-        });
-    } else {
-        alert("Please fill out all inputs.");
-    }
+        if (address != "" && jobList.length != 0 && duration != "") {
+            firebase.database().ref("/jobs/").push({
+                full_name: name,
+                jobs: jobList,
+                address: address,
+                duration: duration
+            });
+        } else {
+            alert("Please fill out all inputs.");
+        }
+    });
+
 }
 
 function showJob() {
+    
     //if (document.getElementById("createProfile").style.display = "none") {
-    document.getElementById("need").style.display = "none";
+    //document.getElementById("need").style.display = "none";
+    document.getElementById("landingPage").style.display = "none";
+    document.getElementById("offerAssistance").style.display = "block";
     loadJobs();
     //}
 }
@@ -140,6 +153,16 @@ function loadJobs() {
 
     firebase.database().ref('/jobs/').on('child_added', callback);
     firebase.database().ref('/jobs/').on('child_changed', callback);
+}
+
+function showSignUp(){
+    document.getElementById("signUp").style.display = "block";
+    document.getElementById("signIn").style.display = "none";
+}
+
+function createJob(){
+    document.getElementById("landingPage").style.display = "none";
+    document.getElementById("need").style.display = "block";
 }
 
 
